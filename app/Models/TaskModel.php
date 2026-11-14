@@ -6,8 +6,7 @@ use CodeIgniter\Model;
 
 class TaskModel extends Model
 {
-    protected $table            = 'tasks';
-    protected $primaryKey       = 'id';
-    protected $allowedFields    = ['title', 'status', 'task_date', 'created_at'];
-    protected $returnType       = 'array';
+    protected $table = 'tasks';
+    protected $primaryKey = 'id';
+    protected $allowedFields = ['title', 'status', 'task_date', 'is_archived', 'created_at'];
 }

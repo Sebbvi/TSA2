@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?></title>
 </head>
 <body>
@@ -9,7 +9,13 @@
         <a href="<?= base_url('/') ?>">Welcome</a> | 
         <a href="<?= base_url('/tasks') ?>">All Tasks</a> | 
         <a href="<?= base_url('/profile') ?>">Profile</a> | 
-        <a href="<?= base_url('/about') ?>">About</a>
+        <a href="<?= base_url('/about') ?>">About</a> | 
+        <?php if (session()->get('isLoggedIn')): ?>
+            <a href="<?= base_url('/tasks/new') ?>">+ New Task</a> | 
+            <a href="<?= base_url('/logout') ?>">Logout (<?= esc(session()->get('username')) ?>)</a>
+        <?php else: ?>
+            <a href="<?= base_url('/login') ?>">Login</a>
+        <?php endif; ?>
     </nav>
     <hr>
 
@@ -22,6 +28,9 @@
                     <th>Task ID</th>
                     <th>Title</th>
                     <th>Status</th>
+                    <?php if (session()->get('isLoggedIn')): ?>
+                        <th>Actions</th>
+                    <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +39,15 @@
                         <td><?= $task['id'] ?></td>
                         <td><?= esc($task['title']) ?></td>
                         <td><strong><?= esc($task['status']) ?></strong></td>
+                        <?php if (session()->get('isLoggedIn')): ?>
+                            <td>
+                                <a href="<?= base_url('/tasks/edit/' . $task['id']) ?>">Edit</a> | 
+                                <form action="<?= base_url('/tasks/delete/' . $task['id']) ?>" method="post" style="display:inline;" onsubmit="return confirm('Archive this task?');">
+                                    <?= csrf_field() ?>
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
